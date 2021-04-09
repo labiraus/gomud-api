@@ -1,4 +1,4 @@
-module github.com/labiraus/gomud-web
+module github.com/labiraus/gomud-api
 
 go 1.16
 
