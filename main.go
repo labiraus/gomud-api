@@ -34,7 +34,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	request := api.UserRequest{UserName: "someone"}
+	request := userRequest{UserName: "someone"}
 
 	resp, err := api.Post("http://user-service.gomud:8080", request)
 	if err != nil {
@@ -44,9 +44,27 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response = api.UserResponse{}
+	var response = userResponse{}
 	api.UnmarshalResponse(&response, resp)
 	fmt.Printf("web handler got %#v\n", response)
 
 	fmt.Fprintf(w, "Greetings %s", response.Greeting)
+}
+
+type userRequest struct {
+	UserName string
+}
+
+type userResponse struct {
+	Greeting string
+}
+
+// Validate checks if it is a valid request
+func (r userRequest) Validate() error {
+	return nil
+}
+
+// Validate checks if it is a valid request
+func (r userResponse) Validate() error {
+	return nil
 }
