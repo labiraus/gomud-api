@@ -9,8 +9,6 @@ import (
 	"os/signal"
 
 	"github.com/labiraus/gomud-common/api"
-
-	_ "github.com/denisenkom/go-mssqldb"
 )
 
 // This example demonstrates a trivial echo server.
@@ -36,7 +34,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 	request := userRequest{UserName: "someone"}
 
-	resp, err := api.Post("http://user-service.gomud:8080", request)
+	resp, err := api.Post("http://service-user.gomud:8080", request)
 	if err != nil {
 		err = fmt.Errorf("user request:%v", err)
 		log.Println(err)
