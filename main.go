@@ -13,14 +13,14 @@ import (
 
 // This example demonstrates a trivial echo server.
 func main() {
-	fmt.Println("hi")
+	log.Println("api starting up")
 	ctx, ctxDone := context.WithCancel(context.Background())
 	done := api.StartBasicApi(ctx, helloHandler)
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	s := <-c
 	ctxDone()
-	fmt.Println("Got signal: " + s.String() + " now closing")
+	log.Println("Got signal: " + s.String() + " now closing")
 	<-done
 }
 
@@ -44,7 +44,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 	var response = userResponse{}
 	api.UnmarshalResponse(&response, resp)
-	fmt.Printf("web handler got %#v\n", response)
+	log.Printf("web handler got %#v\n", response)
 
 	fmt.Fprintf(w, "Greetings %s", response.Greeting)
 }
