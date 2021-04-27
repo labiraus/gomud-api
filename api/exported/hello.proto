@@ -1,0 +1,15 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package exported;
+option go_package = "github.com/labiraus/gomud-api/api/exported";
+
+// The greeting service definition.
+service Hello {
+  // Sends a greeting
+  rpc SayHello(google.protobuf.Empty)  returns (HelloReply) {}
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}

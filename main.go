@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/labiraus/gomud-api/pkg/hello"
 	"github.com/labiraus/gomud-common/api"
 )
 
@@ -15,7 +16,7 @@ import (
 func main() {
 	log.Println("api starting up")
 	ctx, ctxDone := context.WithCancel(context.Background())
-	done := api.StartBasicApi(ctx, helloHandler)
+	done := hello.Start(ctx)
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	s := <-c
