@@ -4,8 +4,10 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
 
-	pb "github.com/labiraus/gomud-api/api/exported"
+	pb "github.com/labiraus/gomud-common/proto/gomud-api"
+	user "github.com/labiraus/gomud-common/proto/gomud-user"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -21,7 +23,30 @@ type server struct {
 
 // SayHello implements helloworld.HelloServer
 func (s *server) SayHello(ctx context.Context, request *emptypb.Empty) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "from heck off"}, nil
+	message, err := callUser("fred")
+	if err != nil {
+		return nil, err
+	}
+	return &pb.HelloReply{Message: message}, nil
+}
+
+func callUser(username string) (string, error) {
+	conn, err := grpc.Dial("http://service-user.gomud:8080", grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	c := user.NewGreeterClient(conn)
+
+	// Contact the server and print out its response.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := c.Greet(ctx, &user.GreetingRequest{Name: username})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	log.Printf("Greeting: %s", r.GetMessage())
+	return "", nil
 }
 
 func Start(ctx context.Context) <-chan struct{} {

@@ -12,6 +12,8 @@ import (
 	"github.com/labiraus/gomud-common/api"
 )
 
+//go:generate make generate
+
 // This example demonstrates a trivial echo server.
 func main() {
 	log.Println("api starting up")
